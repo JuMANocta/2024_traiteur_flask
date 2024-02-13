@@ -45,7 +45,7 @@ def add_client():
     if connexion is not None:
         cursor = connexion.cursor()
         data = request.get_json()
-        cursor.execute(f"INSERT INTO clients (nom, prenom, email) VALUES ({data['nom']},{data['prenom']},{data['email']},{data['adresse']})")
+        cursor.execute(f"INSERT INTO clients (nom, prenom, email, adresse) VALUES ('{data['nom']}','{data['prenom']}','{data['email']}','{data['adresse']}')")
         connexion.commit()
         cursor.close()
         connexion.close()
