@@ -18,7 +18,7 @@ def get_clients():
     connexion = get_db_connexion()
     if connexion is not None:
         cursor = connexion.cursor()
-        cursor.execute("SELECT * FROM client")
+        cursor.execute("SELECT * FROM clients")
         clients = cursor.fetchall()
         cursor.close()
         connexion.close()
