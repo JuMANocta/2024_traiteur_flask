@@ -26,4 +26,31 @@ def get_clients():
     else:
         return jsonify([])
 
+@app.route('/api/plats', methods=['GET'])
+def get_plats():
+    connexion = get_db_connexion()
+    if connexion is not None:
+        cursor = connexion.cursor()
+        cursor.execute("SELECT * FROM plats")
+        plats = cursor.fetchall()
+        cursor.close()
+        connexion.close()
+        return jsonify(plats)
+    else:
+        return jsonify([])
+
+@app.route('/api/clients', methods=['POST'])
+def add_client():
+    connexion = get_db_connexion()
+    if connexion is not None:
+        cursor = connexion.cursor()
+        data = request.get_json()
+        cursor.execute(f"INSERT INTO clients (nom, prenom, email) VALUES ({data['nom']},{data['prenom']},{data['email']},{data['adresse']})")
+        connexion.commit()
+        cursor.close()
+        connexion.close()
+        return jsonify({"message": "Client ajouté"})
+    else:
+        return jsonify({"message": "Erreur de connexion BDD"})
+
 app.run(debug=True, port=5000)
