@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify
 import mysql.connector
 from config import DB_CONFIG
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 def get_db_connexion():
     try:
@@ -50,6 +52,20 @@ def add_client():
         cursor.close()
         connexion.close()
         return jsonify({"message": "Client ajouté"})
+    else:
+        return jsonify({"message": "Erreur de connexion BDD"})
+
+@app.route('/api/plats', methods=['POST'])
+def add_plat():
+    connexion = get_db_connexion()
+    if connexion is not None:
+        cursor = connexion.cursor()
+        data = request.get_json()
+        cursor.execute(f"INSERT INTO plats (nom, description, image, prix) VALUES ('{data['nom']}','{data['description']}','{data['image']}','{data['prix']}')")
+        connexion.commit()
+        cursor.close()
+        connexion.close()
+        return jsonify({"message": "Plat ajouté"})
     else:
         return jsonify({"message": "Erreur de connexion BDD"})
 
